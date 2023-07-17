@@ -2,6 +2,11 @@ import java.util.PriorityQueue;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Comparator;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+
 
 class HuffmanNode {
     private char ch;
@@ -42,6 +47,11 @@ public class HuffmanCoding {
         System.out.println("Original Text: " + test);
         System.out.println("Encoded Text: " + encodedText);
         System.out.println("Decoded Text: " + decodedText);
+
+         String originalText = "hello world";
+        String encodedText = hc.encode(originalText);
+        double ratio = hc.compressionRatio(originalText, encodedText);
+        System.out.println("Compression ratio: " + ratio);
     }
 
     public HuffmanCoding() {
@@ -137,4 +147,30 @@ public class HuffmanCoding {
         return decodedText.toString();
     }
 
+    public void initializeFromFile(String filePath) {
+        HashMap<Character, Integer> frequency = new HashMap<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(" ");
+                if (parts.length != 2) {
+                    throw new IllegalArgumentException("Invalid format in input file.");
+                }
+                char ch = parts[0].charAt(0);
+                int freq = Integer.parseInt(parts[1]);
+                frequency.put(ch, freq);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        buildTree(frequency);
+        generateCodes(queue.peek(), new StringBuilder());
+    }
+
+    public double compressionRatio(String originalText, String encodedText) {
+        int originalSize = originalText.length() * 8;  // Each character is typically 8 bits
+        int compressedSize = encodedText.length();
+        return 1.0 - (double) compressedSize / originalSize;
+    }
 }
