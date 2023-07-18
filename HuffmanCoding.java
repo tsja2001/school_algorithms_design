@@ -5,6 +5,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+
 
 class HuffmanNode {
 
@@ -64,14 +67,22 @@ public class HuffmanCoding {
   // }
 
   public static void main(String[] args) {
+    // 为了适配Mac与Windows环境下中文编码正确
+    try {
+      System.setOut(new PrintStream(System.out, true, "UTF-8"));
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    }
+
+
     // 创建 HuffmanCoding 对象
     HuffmanCoding hc = new HuffmanCoding();
 
-    // 从文件中读取字符权重，并初始化哈夫曼树
+    // 从文件中读取字符权重，并初始化哈夫曼�?
     hc.initializeFromFile("./letter-weight.txt");
     System.out.println("从文件中读取字符权重并初始化哈夫曼树完成");
 
-    // 用于测试的文本
+    // 用于测试的文�?
     String test = "HELLO WORLD";
 
     // 编码文本
@@ -83,9 +94,9 @@ public class HuffmanCoding {
     String decodedText = hc.decode(encodedText);
     System.out.println("解码后的文本: " + decodedText);
 
-    // 计算压缩率
+    // 计算压缩率?
     double compressionRatio = hc.calculateCompressionRatio(test, encodedText);
-    System.out.println("压缩率: " + compressionRatio);
+    System.out.println("压缩�?: " + compressionRatio);
 
     // 打印哈夫曼树
     System.out.println("哈夫曼树:");
